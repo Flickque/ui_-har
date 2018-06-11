@@ -1,0 +1,61 @@
+#draw {
+	display: inline-block;
+	position: relative;
+	text-align: left;
+	float: left;
+	margin: 40px;
+	border: 2px solid #000;
+}
+.ui{
+	display: inline-block;
+	position: relative;
+	text-align: right;
+	float: left;
+}
+.ui button{
+	border: 2px solid #000;
+	text-align: center;
+	padding: 5px;
+	width: 100px;
+	background: #cfff0f;
+	color: #000;
+	cursor: pointer;
+	display: block;
+	margin: 40px;
+}
+.ui input{
+	border: 2px solid #000;
+	text-align: center;
+	padding: 5px;
+	width: 100px;
+	background: #cfff0f;
+	color: #000;
+	cursor: pointer;
+	display: block;
+	margin: 40px;
+}
+.ui input:focus{
+	border: 2px solid red;
+	background: #ff9f0f;
+	text-align: center;
+	padding: 5px;
+	width: 100px;
+	color: #000;
+	cursor: pointer;
+	display: block;
+	margin: 40px;
+}
+.ui button:hover{
+	border: 2px solid red;
+	background: #ff9f0f;
+	transition: 0.3s;
+}
+.check{
+	padding-bottom:5px; padding-top: 70px;
+}
+.check span{
+	margin-left:5px;
+}
+.out{
+	float:right;font-size:200px;margin-left:80px; display: inline-block;
+}
