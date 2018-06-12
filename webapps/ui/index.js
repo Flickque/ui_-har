@@ -53,7 +53,6 @@ function draw(ctx, color, lineWidth, x1, y1, x2, y2) {
 function erase() {
    // console.log('canvas cleared');
     ctx.clearRect(0, 0, canvas.width, canvas.height);
-    document.getElementById('RecOut').innerHTML = '';
 }
 
 
@@ -62,7 +61,6 @@ function findxy(res, e) {
         if (clearBeforeDraw == true) {
             ctx.clearRect(0, 0, canvas.width, canvas.height);
             document.getElementById('nnInput').innerHTML = '';
-            document.getElementById('RecOut').innerHTML = '';
             paths = [];
             clearBeforeDraw = false;
         }
