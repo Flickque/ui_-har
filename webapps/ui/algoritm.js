@@ -3,7 +3,8 @@ let repository = {}
 let numbers = []
 
 const commonPath = "fonts/";
-const picturePAth = ["Arial/","Century Gothic/","Courier New Cyr/","Goudy Old Style/","Times New Roman/"];
+//const picturePAth = ["Arial/", "Century Gothic/", "Courier New Cyr/", "Goudy Old Style/", "Times New Roman/","custom1/","custom2/","custom3/","custom4/","custom5/"];
+const picturePAth = ["custom1/","custom2/","custom3/","custom4/","custom5/"];
 
 let imageCount;
 const imageCountInFolder = 10;
@@ -16,24 +17,24 @@ const bpm = ".BMP";
  * инициализация всех массивов с картинками
  */
 function initAllArrays() {
-    imageCount = picturePAth.length*imageCountInFolder;
+    imageCount = picturePAth.length * imageCountInFolder;
     let imageIndex = 0;
-    console.log("Разрешение выборки = ",imageCount);
-    for (let i = 0; i <= picturePAth.length-1; i++) {
-        for (let j = 0; j <= imageCountInFolder-1; j++) {
+    console.log("Разрешение выборки = ", imageCount);
+    for (let i = 0; i <= picturePAth.length - 1; i++) {
+        for (let j = 0; j <= imageCountInFolder - 1; j++) {
             let localImageIndex = imageIndex; //чтоб не было замыкания и успешно передалось в колбек
             numbers[localImageIndex] = j
-                // Загружаем файл изображения
+            // Загружаем файл изображения
             let img = new Image();
             img.onload = function () {
                 ctx.drawImage(img, 0, 0, img.width, img.height);
-              //  console.log("async" + localImageIndex);
+                //  console.log("async" + localImageIndex);
                 // FIXME вся проблема тут,код асинхронный - сначала прогоняются все картинки и ток потом вызывается колбек для последней
-                repository['array' + localImageIndex] = saveImageToPixelsArray(true);
-            //    console.log(commonPath + picturePAth[i] + j + bpm)
+                repository['array' + localImageIndex] = saveImageToPixelsArray(false);
+                //    console.log(commonPath + picturePAth[i] + j + bpm)
                 //  console.log(repository.array0.length);
                 // console.log("Array ",i);
-             //   console.log(repository['array' + i]);
+                //   console.log(repository['array' + i]);
                 erase();
             };
             img.src = commonPath + picturePAth[i] + j + bpm;
@@ -51,38 +52,38 @@ function saveImageToPixelsArray(reverse) {
     let data = imageData.data;
     let pixelsArray = [];
 
-    if (reverse)
-    {  
+    if (reverse) {
         // iterate over all pixels
-       // console.log("saveImageToPixelsArray " + data.length)
+        // console.log("saveImageToPixelsArray " + data.length)
         for (let i = 0, n = data.length; i < n; i += 1) {
             pixelsArray[i] = data[i];
             //if (pixelsArray[i] != 0) console.log(pixelsArray[i]) // КОДЫ разные все - нетолько альфа но и рбг
         }
 
     }
-    else
-    {
+    else {
         // iterate over all pixels
-       // console.log("saveImageToPixelsArray " + data.length)
+        // console.log("saveImageToPixelsArray " + data.length)
         for (let i = 0, n = data.length; i < n; i += 1) {
             pixelsArray[i] = data[i];
+            if (pixelsArray[i] != 255  && pixelsArray[i] != 0) {
+                //console.log(pixelsArray[i])
+                pixelsArray[i] = 0
+            }
             //if (pixelsArray[i] != 0) console.log(pixelsArray[i]) // КОДЫ разные все - нетолько альфа но и рбг
         }
-         for (let i = 0, n = pixelsArray.length; i < n; i+=4)
-        {
-            if (pixelsArray[i]==0 && pixelsArray[i+1]==0 && pixelsArray[i+2]==0 && pixelsArray[i+3]==0)
-            {
-                pixelsArray[i]=255;
-                pixelsArray[i+1]=255;
-                pixelsArray[i+2]=255;
-                pixelsArray[i+3]=255;
+        for (let i = 0, n = pixelsArray.length; i < n; i += 4) {
+            if (pixelsArray[i] == 0 && pixelsArray[i + 1] == 0 && pixelsArray[i + 2] == 0 && pixelsArray[i + 3] == 0) {
+                pixelsArray[i] = 255;
+                pixelsArray[i + 1] = 255;
+                pixelsArray[i + 2] = 255;
+                pixelsArray[i + 3] = 255;
             }
         }
     }
+    console.log(pixelsArray)
     return pixelsArray;
 }
-
 
 
 /**
@@ -94,15 +95,16 @@ function saveImageToPixelsArray(reverse) {
 function compare(userArray, targetArray) {
     let count = 0;
     let countj = 0;
-    for (let i = 0; i+4 <= userArray.length; i++) {
+    for (let i = 0; i + 4 <= userArray.length; i++) {
         countj = 0;
-        for (let j = i; j <= i+4; j++) {
-           if (userArray[j] != targetArray[j]) countj++;
+        for (let j = i; j <= i + 4; j++) {
+            if (userArray[j] != targetArray[j]) countj++;
         }
         if (countj == 4)
             count++;
         //FIXME возможно считать не так ,каждый пиксель - 4 элемента, вот походу надо по 4 сравнивать и если из них хоть 1 несовпадает то пиксель не равен
     }
+    console.log(count)
     return count;
 }
 
@@ -119,23 +121,27 @@ function calculateFuckingShit(userArray) {
         pArray[i] = 0;
     }
 
-    for (let i = 0; i <= imageCount-1; i++) {
+    for (let i = 0; i <= imageCount - 1; i++) {
         let digit = numbers[i];
         let r = compare(userArray, repository['array' + i]);
         // console.log("r " + r  + " " + i);
-        if (r==0)
-        {
-            pArray[digit] = pArray[digit] + 1000000 / (1 + r * r);
-           // console.log("pArray[digit] " + pArray[digit]);
+        if (r == 0) {
+            let  temp = 1000000 / (1 + r * r)
+            if (pArray[digit] < temp) pArray[digit] = temp
+
+            //pArray[digit] = pArray[digit] + 1000000 / (1 + r * r);
+             // console.log("pArray[digit] " + pArray[digit]);
         }
-        else
-        {
-            pArray[digit] = pArray[digit] + 1000000 / (r * r);
-           // console.log("pArray[digit] " + pArray[digit]);
+        else {
+            let  temp = 1000000 / (1 + r * r)
+            if (pArray[digit] < temp) pArray[digit] = temp
+
+            //pArray[digit] = pArray[digit] + 1000000 / (r * r);
+            // console.log("pArray[digit] " + pArray[digit]);
         }
     }
 
-    console.log(pArray);
+    //console.log(pArray);
 
     /*
         // Сортирую массив по убыванию, чтобы взять три максимальных значения
@@ -152,31 +158,32 @@ function calculateFuckingShit(userArray) {
     let max2 = 0;
     let maxNO3 = 0;
     let max3 = 0;
-    for (let i = 0; i <= imageCount; i++) {
+
+    for (let i = 0; i < pArray.length; i++) {
         if (pArray[i] > max) {
             max = pArray[i];
-            maxNO = numbers[i]
+            maxNO = i
         }
-    }   
-    for (let i = 0; i <= imageCount; i++) {
+    }
+    for (let i = 0; i < pArray.length; i++) {
         if (pArray[i] > max2 && pArray[i] < max) {
             max2 = pArray[i];
-            maxNO2 = numbers[i]
+            maxNO2 = i
         }
-    } 
-    for (let i = 0; i <= imageCount; i++) {
+    }
+    for (let i = 0; i < pArray.length; i++) {
         if (pArray[i] > max3 && pArray[i] < max && pArray[i] < max2) {
             max3 = pArray[i];
-            maxNO3 = numbers[i]
+            maxNO3 = i
         }
-    } 
+    }
     console.log("NUMBER: ", maxNO, "RATE: ", max);
     console.log("SECOND MAX NUMBER: ", maxNO2, " SECOND MAX RATE: ", max2, " THIRD MAX NUMBER: ", maxNO3, " THIRD MAX RATE: ", max3);
 }
 
 function calculate() {
-   // console.log("test");
-  //  console.log(saveImageToPixelsArray(false));
+    // console.log("test");
+    //  console.log(saveImageToPixelsArray(false));
     calculateFuckingShit(saveImageToPixelsArray(false));
 
 }
