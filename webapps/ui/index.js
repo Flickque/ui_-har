@@ -51,7 +51,7 @@ function draw(ctx, color, lineWidth, x1, y1, x2, y2) {
 }
 
 function erase() {
-    console.log('canvas cleared');
+   // console.log('canvas cleared');
     ctx.clearRect(0, 0, canvas.width, canvas.height);
     document.getElementById('RecOut').innerHTML = '';
 }
