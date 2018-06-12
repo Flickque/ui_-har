@@ -31,7 +31,9 @@ function initAllArrays() {
             repository['array' + i] = saveImageToPixelsArray();
 
             console.log("img/" + i + ".png")
-            console.log(repository.array0.length);
+          //  console.log(repository.array0.length);
+           // console.log("Array ",i);
+          //  console.log(repository['array' + i]);
             erase();
         };
         img.src = "img/" + i + ".png";
@@ -64,8 +66,14 @@ function saveImageToPixelsArray() {
  */
 function compare(userArray, targetArray) {
     let count = 0;
-    for (let i = 0; i <= userArray.length; i++) {
-        if (userArray[i] != targetArray[i]) count++;
+    let countj = 0;
+    for (let i = 0; i+4 <= userArray.length; i++) {
+        countj = 0;
+        for (let j = i; j <= i+4; j++) {
+           if (userArray[j] != targetArray[j]) countj++;
+        }
+        if (countj == 4)
+            count++;
         //FIXME возможно считать не так ,каждый пиксель - 4 элемента, вот походу надо по 4 сравнивать и если из них хоть 1 несовпадает то пиксель не равен
     }
     return count;
@@ -81,7 +89,7 @@ function calculateFuckingShit(userArray) {
 
     for (let i = 0; i <= imageSize; i++) {
         let r = compare(userArray, repository['array' + i]);
-        console.log("r " + r);
+        console.log("r " + r  + " " + i);
         // FIXME хз как тут с точностю
         pArray[i] = pArray[i] + 1000000 / (1 + r * r);
         console.log("pArray[i] " + pArray[i]);
@@ -101,6 +109,7 @@ function calculateFuckingShit(userArray) {
 
 function calculate() {
     console.log("test");
+ //   console.log(saveImageToPixelsArray());
     calculateFuckingShit(saveImageToPixelsArray());
 
 }
