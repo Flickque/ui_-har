@@ -8,7 +8,7 @@ var currY = 0;
 var paths = []; // recording paths
 var paintFlag = false;
 var color = "black";
-var lineWidth = 20;
+var lineWidth = 5;
 
 var clearBeforeDraw = false;
 
@@ -17,8 +17,8 @@ var clearBeforeDraw = false;
 function init() {
     canvas = document.getElementById('draw');
     ctx = canvas.getContext("2d");
-    canvas.width = 150;
-    canvas.height = 150;
+    canvas.width = 50;
+    canvas.height = 70;
 
     //FIXME тут надо в цикле пробежать все картинки и сформсировать массивы для всех
     //FIXME запилить для примера цикл на лямдах
